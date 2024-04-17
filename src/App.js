@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Container, CssBaseline, ThemeProvider, Typography } from "@mui/material";
+import { createTheme } from "@mui/material/styles"; // Import createTheme from @mui/material/styles
+
+import RoutesController from './RoutesController/RoutesController';
+
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: '#8bc34a'
+    },
+    secondary: {
+      main: "#FFD700"
+    }
+  },
+});
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="xl">
+
+        <SignedOut >
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+
+        <RoutesController />
+      </Container>
+    </ThemeProvider>
   );
 }
 
