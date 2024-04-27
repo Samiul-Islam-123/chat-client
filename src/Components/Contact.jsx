@@ -14,7 +14,7 @@ function Contact(props) {
         marginTop : "10px",
         marginBottom : "10px"
     }}>
-    <CardActionArea onClick={()=>{
+    <CardActionArea disabled={props.isClickable} onClick={()=>{
         setCurrentConversation(props)
     }}>
         <CardContent style={{

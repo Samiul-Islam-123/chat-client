@@ -25,14 +25,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="xl">
-
-        <SignedOut >
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-
+<div style={{
+  height : "15px"
+}}></div>
         <RoutesController />
       </Container>
     </ThemeProvider>
