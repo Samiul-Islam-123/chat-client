@@ -4,6 +4,8 @@ import { Button, Card, CardContent, Divider, Toolbar } from '@mui/material'
 import SearchBar from './SearchBar'
 import Contacts from './../SampleData/Contacts'
 import axios from 'axios'
+import Snackbar from '@mui/material/Snackbar';
+
 
 function ContactPanel() {
 
@@ -13,6 +15,20 @@ function ContactPanel() {
 
     const [request_sent, setRequest_Sent] = useState([]);
     const [request_inbox, setRequest_Inbox] = useState([]);
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
 
 
     const [ContentToDisplay, setContentToDisplay] = useState('contacts');
@@ -103,7 +119,13 @@ function ContactPanel() {
             toID: contactID
         })
 
-        console.log(response)
+        if(response.data.success === true){
+            setOpen(true);
+        }
+
+        else{
+            alert(response.data.message)
+        }
 
     }
 
@@ -118,10 +140,10 @@ function ContactPanel() {
         console.log(response);
 
         if (response.data.success === true) {
-            alert(response.data.message)
+            setOpen(true)
         }
 
-        if (response.data.success === false) {
+        else {
             alert(response.data.message)
         }
     }
@@ -141,7 +163,12 @@ function ContactPanel() {
 
     return (
         <>
-
+            <Snackbar
+                open={open}
+                autoHideDuration={5000}
+                onClose={handleClose}
+                message="This Snackbar will be dismissed in 5 seconds."
+            />
 
             <SearchBar setSearchResult={setSearchResult} />
 
@@ -241,15 +268,15 @@ function ContactPanel() {
                     <>
                         {request_inbox && request_inbox.length > 0 ? (
                             <>
-                            {
-                                        console.log(request_inbox)
-                                    }
+                                {
+                                    console.log(request_inbox)
+                                }
                                 <h2>Requests</h2>
                                 {request_inbox.map((item, index) => (
                                     <>
-                                    {
-                                        console.log(item)
-                                    }
+                                        {
+                                            console.log(item)
+                                        }
                                         <Contact
                                             isClickable={true}
                                             key={index}
