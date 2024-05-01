@@ -27,13 +27,14 @@ function ChatBody(props) {
         const formattedTimestamp = `${hours}:${minutes}`;
 
         const marginLeftStyle = item.from === myID ? "auto" : "0px";
+
         return (<>
           <Card key={index} style={{
             marginLeft: marginLeftStyle,
             width: "fit-content",
             maxWidth: "50vw",
-            marginTop : "5px",
-            marginBottom : "5px"
+            marginTop: "5px",
+            marginBottom: "5px"
           }}>
             <CardContent style={{
               display: "flex",
@@ -43,26 +44,30 @@ function ChatBody(props) {
                 {item.content}
               </Typography>
               <div style={{
-                marginTop : "15px",
-                display : "flex",
-                justifyContent : "space-between",
-                alignItems : "center"
+                marginTop: "15px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
               }}>
-              <Typography variant='h9' style={{
-                fontSize: "10px"
-              }}>
-                {formattedTimestamp}
-              </Typography>
+                <Typography variant='h9' style={{
+                  fontSize: "10px"
+                }}>
+                  {formattedTimestamp}
+                </Typography>
 
-              <Icon>
                 {
-                  item.seen === true ? (<>
-                    <DoneAllIcon />
-                  </>) : (<>
-                    <CheckIcon />
+                  item.from === myID && (<>
+                    <Icon>
+                      {
+                        item.seen === true ? (<>
+                          <DoneAllIcon />
+                        </>) : (<>
+                          <CheckIcon />
+                        </>)
+                      }
+                    </Icon>
                   </>)
                 }
-              </Icon>
               </div>
             </CardContent>
           </Card>
