@@ -15,6 +15,7 @@ function ContactPanel() {
 
     const [request_sent, setRequest_Sent] = useState([]);
     const [request_inbox, setRequest_Inbox] = useState([]);
+    const [SnackMessage, setSnackMessage] = useState("")
 
     const [open, setOpen] = React.useState(false);
 
@@ -44,6 +45,7 @@ function ContactPanel() {
         })
 
         if (res.data.success === true) {
+            //console.log(res)
             if (res.data.contacts != null)
                 setContacts(res.data.contacts.contacts)
         }
@@ -120,6 +122,7 @@ function ContactPanel() {
         })
 
         if(response.data.success === true){
+            setSnackMessage(response.data.message)
             setOpen(true);
         }
 
@@ -140,6 +143,7 @@ function ContactPanel() {
         console.log(response);
 
         if (response.data.success === true) {
+            setSnackMessage(response.data.message)
             setOpen(true)
         }
 
@@ -167,7 +171,7 @@ function ContactPanel() {
                 open={open}
                 autoHideDuration={5000}
                 onClose={handleClose}
-                message="This Snackbar will be dismissed in 5 seconds."
+                message={SnackMessage}
             />
 
             <SearchBar setSearchResult={setSearchResult} />
@@ -231,13 +235,17 @@ function ContactPanel() {
                             <>
                                 <h2>Contacts</h2>
                                 {contacts.map((item, index) => (
+                                    <>
+                                    
                                     <Contact
+                                        user_ID = {item._id}
                                         key={index}
                                         profileImage={item.profileImage}
                                         username={item.username}
                                         time={item.time}
                                         lastMessage={item.lastMessage}
-                                    />
+                                        />
+                                        </>
                                 ))}
                             </>
                         ) : (
