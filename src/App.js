@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Container, CssBaseline, ThemeProvider, Typography } from "@mui/material";
 import { createTheme } from "@mui/material/styles"; // Import createTheme from @mui/material/styles
 
 import RoutesController from './RoutesController/RoutesController';
 
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import { SocketContext } from './Contexts/SocketProvider';
 
 
 const theme = createTheme({
@@ -20,7 +21,25 @@ const theme = createTheme({
 });
 
 
+
+
 function App() {
+  const socket = useContext(SocketContext)
+  useEffect(() => {
+    // Listen for 'message' event from the server
+    if (socket) {
+      socket.emit("test", {
+        userid : JSON.parse(localStorage.getItem('mongo_user_id'))
+      })
+    }
+
+    // Clean up event listener when component unmounts
+    return () => {
+      if (socket) {
+        socket.off('test');
+      }
+    };
+  }, [socket]);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -28,6 +47,9 @@ function App() {
         <div style={{
           height: "15px"
         }}></div>
+
+
+
         <RoutesController />
       </Container>
     </ThemeProvider>
