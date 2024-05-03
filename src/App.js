@@ -25,18 +25,19 @@ const theme = createTheme({
 
 function App() {
   const socket = useContext(SocketContext)
+  const userid = JSON.parse(localStorage.getItem('mongo_user_id'))
   useEffect(() => {
     // Listen for 'message' event from the server
     if (socket) {
-      socket.emit("test", {
-        userid : JSON.parse(localStorage.getItem('mongo_user_id'))
+      socket.emit("online", {
+        userid : userid
       })
     }
 
     // Clean up event listener when component unmounts
     return () => {
       if (socket) {
-        socket.off('test');
+        socket.off('online');
       }
     };
   }, [socket]);

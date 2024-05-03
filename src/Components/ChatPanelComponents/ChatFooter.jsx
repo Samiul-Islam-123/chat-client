@@ -1,12 +1,21 @@
 import { IconButton, TextField, FormControl } from '@mui/material';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
+import { SocketContext } from '../../Contexts/SocketProvider';
 
 function ChatFooter() {
+
+  const socket = useContext(SocketContext)
+  const [message, setMessage] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your form submission logic here
-    console.log("Mushi Mushi")
+    if(message!=""){
+      console.log(message)
+      console.log(socket.id)
+      setMessage("")
+    }
+    
   };
 
   return (
@@ -15,8 +24,12 @@ function ChatFooter() {
 
         <FormControl fullWidth style={{ marginLeft: '8px' }}>
           <TextField 
+          value={message}
             label="Type your message here"
             fullWidth
+            onChange={(e)=>{
+              setMessage(e.target.value)
+            }}
             // Add any necessary props for handling the input
           />
         </FormControl>

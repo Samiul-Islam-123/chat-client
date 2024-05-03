@@ -44,11 +44,13 @@ function ChatPanel() {
     return (
         <>
             {currentConversation ? (<>
+            
                 <div className="chat-header">
                     <ChatHeader
                         profileImage={currentConversation.profileImage}
                         username={currentConversation.username}
                         onlineStatus={"Online"}
+                        userID = {currentConversation.user_ID}
                     />
                 </div>
                 <div className="chat-body" style={{
