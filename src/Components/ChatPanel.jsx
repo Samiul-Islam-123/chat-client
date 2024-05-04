@@ -60,7 +60,8 @@ function ChatPanel() {
                     <ChatBody ChatData = {ChatData}/>
                 </div>
                 <div className="chat-footer">
-                    <ChatFooter />
+                    
+                    <ChatFooter data = {currentConversation}/>
                 </div>
             </>) : (<>No conversation found</>)}
 

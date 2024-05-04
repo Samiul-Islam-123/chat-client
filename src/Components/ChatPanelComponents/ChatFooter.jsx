@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { SocketContext } from '../../Contexts/SocketProvider';
 
-function ChatFooter() {
+function ChatFooter(props) {
 
   const socket = useContext(SocketContext)
   const [message, setMessage] = useState("");
@@ -11,8 +11,12 @@ function ChatFooter() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if(message!=""){
-      console.log(message)
-      console.log(socket.id)
+      console.log(props)
+      socket.emit('send-message', ({
+        fromUserID : JSON.parse(localStorage.getItem('mongo_user_id')),
+        targetUserID : props.data.user_ID,
+        content : message
+      }))
       setMessage("")
     }
     
