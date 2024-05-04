@@ -11,7 +11,7 @@ function ChatFooter(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if(message!=""){
-      console.log(props)
+      //console.log(props)
       socket.emit('send-message', ({
         fromUserID : JSON.parse(localStorage.getItem('mongo_user_id')),
         targetUserID : props.data.user_ID,

@@ -9,7 +9,7 @@ function ChatHeader(props) {
     const socket = useContext(SocketContext);
     const [isOnline, setISOnline] = useState(false);
     
-    console.log(props.userID)
+    //console.log(props.userID)
     socket.emit('get-online-status', {
         userID : props.userID
     })

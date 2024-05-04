@@ -25,6 +25,7 @@ function ChatPanel() {
 
         if(response.data.success === true){
             setChatData(response.data.chatData.Chats)
+            //console.log(currentConversation)
         }
 
         else{
@@ -37,7 +38,7 @@ function ChatPanel() {
         if(currentConversation != null){
 
             //console.log(currentConversation)
-            fetchChats()
+            //fetchChats()
         }
     },[currentConversation])
 
@@ -57,7 +58,7 @@ function ChatPanel() {
                     height: "84vh",
                     overflow: "auto"
                 }}>
-                    <ChatBody ChatData = {ChatData}/>
+                    <ChatBody currentConversation = {currentConversation}/>
                 </div>
                 <div className="chat-footer">
                     
