@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Contact from './Contact'
-import { Button, Card, CardContent, Divider, Toolbar } from '@mui/material'
+import { Button, Card, CardContent, Divider, IconButton, Toolbar } from '@mui/material'
 import SearchBar from './SearchBar'
 import Contacts from './../SampleData/Contacts'
 import axios from 'axios'
 import Snackbar from '@mui/material/Snackbar';
+import { SocketContext } from '../Contexts/SocketProvider'
+import Badge from '@mui/material/Badge';
+import InboxIcon from '@mui/icons-material/Inbox';
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import OutboxIcon from '@mui/icons-material/Outbox';
+
 
 
 function ContactPanel() {
@@ -17,18 +23,33 @@ function ContactPanel() {
     const [request_inbox, setRequest_Inbox] = useState([]);
     const [SnackMessage, setSnackMessage] = useState("")
 
+    const [contacts_indicator, setcontacts_indicator] = useState(true);
+    const [request_indicator, setrequest_indicator] = useState(true);
+    const [inbox_indicator, setinbox_indicator] = useState(true);
+    
+
     const [open, setOpen] = React.useState(false);
 
+    const socket = useContext(SocketContext)
+
+    useEffect(() => {
+        socket.on('request-sent', data => {
+            setinbox_indicator(false)
+            setSnackMessage(data);
+            setOpen(true);
+        })
+    }, [socket])
+
     const handleClick = () => {
-      setOpen(true);
+        setOpen(true);
     };
-  
+
     const handleClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-  
-      setOpen(false);
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
     };
 
 
@@ -66,6 +87,8 @@ function ContactPanel() {
 
         if (res.data.success === true) {
             //console.log(res.data)
+            if(res.data.requests.length>0)
+                setrequest_indicator(false)
             setRequest_Sent(res.data.requests)
         }
 
@@ -86,6 +109,8 @@ function ContactPanel() {
 
         if (res.data.success === true) {
             console.log(res.data)
+            if(res.data.requests.length>0)
+                setinbox_indicator(false)
             setRequest_Inbox(res.data.requests)
         }
 
@@ -121,12 +146,13 @@ function ContactPanel() {
             toID: contactID
         })
 
-        if(response.data.success === true){
+        if (response.data.success === true) {
             setSnackMessage(response.data.message)
+            socket.emit('send-request', (contactID))
             setOpen(true);
         }
 
-        else{
+        else {
             alert(response.data.message)
         }
 
@@ -179,27 +205,36 @@ function ContactPanel() {
             <Toolbar style={{
                 justifyContent: "space-between"
             }}>
-                <Button variant='outlined' onClick={() => {
+                <IconButton variant='outlined' onClick={() => {
                     setContentToDisplay('contacts')
                 }}>
-                    Contacts
-                </Button>
-                <Button variant='outlined' onClick={() => {
+                    <Badge color="secondary" variant="dot" invisible={contacts_indicator}>
+                            <PermContactCalendarIcon />
+                        </Badge>
+                </IconButton>
+                <IconButton variant='outlined' onClick={() => {
                     setContentToDisplay('request-sent')
                 }}>
-                    Requests sent
-                </Button>
-                <Button variant='outlined' onClick={() => {
-                    setContentToDisplay('request-inbox')
-                }}>
-                    Inbox
-                </Button>
+                    <Badge color="secondary" variant="dot" invisible={request_indicator}>
+                            <OutboxIcon />
+                        </Badge>
+                </IconButton>
+                
+                    <IconButton onClick={() => {
+                        setContentToDisplay('request-inbox')
+                    }}>
+                        <Badge color="secondary" variant="dot" invisible={inbox_indicator}>
+                            <InboxIcon />
+                        </Badge>
+
+                    </IconButton>
+
             </Toolbar>
 
             <Divider />
 
             <div style={{
-                height: "90vh",
+                height: "85vh",
                 overflow: "auto"
             }}>
 
@@ -229,6 +264,7 @@ function ContactPanel() {
                     )
                 }
 
+
                 {ContentToDisplay === 'contacts' ? (
                     <>
                         {contacts && contacts.length > 0 ? (
@@ -236,16 +272,16 @@ function ContactPanel() {
                                 <h2>Contacts</h2>
                                 {contacts.map((item, index) => (
                                     <>
-                                    
-                                    <Contact
-                                        user_ID = {item._id}
-                                        key={index}
-                                        profileImage={item.profileImage}
-                                        username={item.username}
-                                        time={item.time}
-                                        lastMessage={item.lastMessage}
+
+                                        <Contact
+                                            user_ID={item._id}
+                                            key={index}
+                                            profileImage={item.profileImage}
+                                            username={item.username}
+                                            time={item.time}
+                                            lastMessage={item.lastMessage}
                                         />
-                                        </>
+                                    </>
                                 ))}
                             </>
                         ) : (

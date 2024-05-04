@@ -44,7 +44,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl" >
         <div style={{
           height: "15px"
         }}></div>

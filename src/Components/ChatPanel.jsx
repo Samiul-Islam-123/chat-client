@@ -38,7 +38,7 @@ function ChatPanel() {
         if(currentConversation != null){
 
             //console.log(currentConversation)
-            //fetchChats()
+            fetchChats()
         }
     },[currentConversation])
 
