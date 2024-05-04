@@ -16,14 +16,20 @@ function ChatHeader(props) {
     useEffect(()=>{
 
         socket.on('offline', (data)=>{
-            console.log("User disconnected")
             console.log(data)
+            setISOnline(data)
         })
 
         socket.on('online_status', (data)=>{
             setISOnline(data)
         })
     },[socket])
+
+    useEffect(()=>{
+        socket.emit('get-online-status', {
+            userID : props.userID
+        })
+    },[])
     
     return (
         <>
