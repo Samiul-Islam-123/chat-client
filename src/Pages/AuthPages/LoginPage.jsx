@@ -13,7 +13,12 @@ function LoginPage() {
     console.log(`${process.env.REACT_APP_API_URL}/api/add-user`)
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/add-user`, data)
     if (response.data.success === true)
-      return;
+      {
+        console.log(response)
+        localStorage.setItem('mongo_user_id', response.data.mongo_user_id)
+        alert("Saved into Localstorage")
+        return;
+      }
 
     else
       alert(response.data.message)
